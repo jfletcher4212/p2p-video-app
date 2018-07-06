@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script> 
+  </head>
+  <body>
+    <link rel="stylesheet" href="/chatroom-style.css">
+    <div class="videoContainer">
+
+      <div id = "banner">
+        <h1>
+          Placeholder1 <br>
+          Room & Site Information
+        </h1>
+      </div>
+      <div id="userList">
+        <h1>
+          Online Users
+        </h1>
+        <ul class="list-group" id="users">
+          
+        </ul>
+      </div>
+        <div class="videoBorder">
+          <!-- <img id="otherUserStream" style="width:100%;" src="https://cdn.pixabay.com/photo/2017/08/04/05/37/coming-soon-2579123_960_720.jpg"> -->
+          <!--<video id="otherUserStream" autoplay></video> -->
+        </div>
+
+
+      <div id="chatBox">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7">
+              <div class="chat" id="chat">
+                <form id="messageForm">
+                  <div class="form-group">
+                    <label>Enter Message</label>
+                    <textarea class="form-control" id="message"></textarea>
+                  </div>
+                  <br />
+                  <input type="submit" class="btn btn-primary" value="Send Message" />
+                </form>
+                <div id="chatLog">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div>
+        <video id="myStream" autoplay></video>
+      </div>
+    </div>
+     <!-- <script type="text/javascript" src="/getUserMedia.js"></script> -->
+    <script>
+      $(function(){
+        const socket = io.connect();
+        const $messageForm = $('#messageForm');
+        const $message = $('#message');
+        const $chat = $('#chat');
+        const $chatLog= $('#chatLog');
+        
+        $messageForm.submit(function(e){
+          e.preventDefault();
+          if($message.val() !== ''){
+            socket.emit('send message', $message.val());
+            $message.val('');
+          }
+        });
+        
+        socket.on('new message', function(data){
+          const newChild = '<div class="well">'+data.msg+'</div>';
+          $chatLog.prepend(newChild);
+        });
+      });
+    </script>
+  </body>
+</html>
