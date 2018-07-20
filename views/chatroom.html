@@ -8,28 +8,42 @@
   </head>
   <body>
     <link rel="stylesheet" href="/chatroom-style.css">
-    <div class="videoContainer">
+    <form id="userForm">
+      <div class="form-group">
+        <label>Enter Username:</label>
+        <textarea class="form-control" id="username" required></textarea>
+        <label>Enter Room Name:</label>
+        <textarea class="form-control" id="roomName" required></textarea>
+      </div>
+      <br />
+      <input type="submit" class="btn btn-primary" value="Submit" />
+    </form>
+    
+    <div class="videoContainer" id="videoContainer">
 
       <div id = "banner">
-        <h1>
-          Placeholder1 <br>
+        <h3>
+          Welcome <br>
           Room & Site Information
-        </h1>
+        </h3>
+        <h3 id="roomDisplay">
+          
+        </h3>
       </div>
       <div id="userList">
-        <h1>
+        <h3>
           Online Users
-        </h1>
-        <ul class="list-group" id="users">
-          
-        </ul>
+        </h3>
+        <div id="users-container">
+          <ul class="list-group" id="users">
+          </ul>
+          <input type="submit" class="btn btn-primary" value="Clear Users" id="btnUserClear" />
+        </div>
       </div>
-        <div class="videoBorder">
+        <div class="videoBorder" id = "otherVideo">
           <!-- <img id="otherUserStream" style="width:100%;" src="https://cdn.pixabay.com/photo/2017/08/04/05/37/coming-soon-2579123_960_720.jpg"> -->
           <!--<video id="otherUserStream" autoplay></video> -->
         </div>
-
-
       <div id="chatBox">
         <div class="container">
           <div class="row">
@@ -59,24 +73,71 @@
     </div>
      <!-- <script type="text/javascript" src="/getUserMedia.js"></script> -->
     <script>
+      $('#btnUserClear').click(function(e){
+        e.preventDefault();
+        $('#users-container').children().empty();
+      });
+    </script>
+    <script>
       $(function(){
         const socket = io.connect();
         const $messageForm = $('#messageForm');
         const $message = $('#message');
+        const $userForm = $('#userForm');
+        const $user = $('#username');
+        const $room = $('#roomName');
+        const $userList = $('#users');
         const $chat = $('#chat');
         const $chatLog= $('#chatLog');
+        var myUsername = '';
+        var users = [];
+        
         
         $messageForm.submit(function(e){
           e.preventDefault();
           if($message.val() !== ''){
-            socket.emit('send message', $message.val());
+            socket.emit('send message', {message: $message.val(), username: myUsername});
             $message.val('');
           }
         });
         
+        //Send a message with enter.
+        $message.keypress(function (event){
+          if(event.which == 13){
+            $messageForm.click();
+//            $message.val('');
+          };
+        });
+        
+        $userForm.submit(function(e){
+          e.preventDefault();
+          myUsername = $user.val();
+          myRoomname = $room.val();
+          if($user.val !== ''){
+            socket.emit('send new user', myUsername);
+            socket.emit('enter room', {room: myRoomname, username: myUsername});
+            $userForm.hide();
+            document.getElementById('videoContainer').style.visibility = "visible";
+          }
+        });
+        
+        
         socket.on('new message', function(data){
-          const newChild = '<div class="well">'+data.msg+'</div>';
+          const newChild = '<div class="well">' + data.username+ ": " + data.message + '</div>';
           $chatLog.prepend(newChild);
+        });
+        
+        
+        socket.on('userList update', function(userList){
+          users = [];
+          
+          //empty our <ul> of previous list
+          $('#users-container').children().empty();
+          //we then fill that <ul> with our updated user list <li> items
+          for(var user in userList.users){
+            $userList.append("<li class='tempLi'>" + userList.users[user] + "</li>");
+          }
+          $userList.childNodes = users;
         });
       });
     </script>
