@@ -15,12 +15,16 @@
   background-color: #DDA;
   grid-column: 1 / 2;
   grid-row: 1 / 4; 
+  text-align: center;
+  width: 100%;
 }
 
 #userList {  
   background-color: #DDA;
   grid-column: 4 / 5;
   grid-row: 1 / 3; 
+  width: 100%;
+  text-align: center;
 }
 
 #chatBox {
@@ -35,6 +39,7 @@
   height: 8em;  
   background-color: #EEE;
 }
+
 
 .well{
   margin: 0px 0px 0px 0px;
@@ -51,6 +56,7 @@
   grid-template-rows: 30vh 30vh 30vh;
   grid-column-gap: 2vw;
   grid-row-gap: 2vh;
+  visibility:hidden;
 }
 
 .videoBorder{
@@ -61,3 +67,15 @@
   grid-column: 2 / 4;
   grid-row: 1 / 3; 
 }
+
+ul {
+  list-style-type: none;
+}
+
+h3 {
+  font-size: 200%;
+}
+
+/*#videoContainer{
+  display: none;
+}*/

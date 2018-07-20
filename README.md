@@ -1,34 +1,14 @@
-Welcome to Glitch
+Peer-to-Peer Video Chat
 =================
 
-Click `Show` in the header to see your app live. Updates to your code will instantly deploy and update live.
+# Usage:
 
-**Glitch** is the friendly community where you'll build the app of your dreams. Glitch lets you instantly create, remix, edit, and host an app, bot or site, and you can invite collaborators or helpers to simultaneously edit code with you.
+When the user visits the site and grants permission to use their webcam and microphone, they are able to pick a room name and connect with one other user. They are able to chat via text, and send their webcam and audio input/microphone to each other.
 
-Find out more [about Glitch](https://glitch.com/about).
+## Known Issues/Planned Updates:
 
-
-Your Project
-------------
-
-On the front-end,
-- edit `public/client.js`, `public/style.css` and `views/index.html`
-- drag in `assets`, like images or music, to add them to your project
-
-On the back-end,
-- your app starts at `server.js`
-- add frameworks and packages in `package.json`
-- safely store app secrets in `.env` (nobody can see this but you and people you invite)
-
-
-Made by [Fog Creek](https://fogcreek.com/)
--------------------
-
-\ ゜o゜)ノ
-
-
-# Peer-to-Peer Video Chat
-
-## Usage:
-
-When the user visits the site and grants permission to use their webcam and microphone, the
+* Data Sanitization needs to be implemented on all user input. 
+* Video Streaming needs to be implemented
+* Channels/rooms need to be implemented. Users' sockets should be added to the channel with name 'room'
+* Disconnections/reconnections need to remove/add the user's username to the user list, respectively
+* userArrays need to be implemented into server.js to allow user, room, and socket id to be tied together.
