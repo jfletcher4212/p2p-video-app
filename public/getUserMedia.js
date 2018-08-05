@@ -8,7 +8,7 @@ function getMediaStream(constraints, mediaContainer){
   if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
    const constraints = {
      video: true,
-     audio: true
+     //audio: true
    };
    const video = document.getElementById('myStream');
    function successfulStreamGet(stream){

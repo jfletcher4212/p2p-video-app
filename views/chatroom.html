@@ -24,7 +24,8 @@
       <div id = "banner">
         <h3>
           Welcome <br>
-          Room & Site Information
+          Room & Site Information <br>
+          Room Name: 
         </h3>
         <h3 id="roomDisplay">
           
@@ -89,14 +90,15 @@
         const $userList = $('#users');
         const $chat = $('#chat');
         const $chatLog= $('#chatLog');
-        var myUsername = '';
-        var users = [];
+        const $roomDisplay = $('#roomDisplay');
+        let myUsername = '';
+        let users = [];
         
         
         $messageForm.submit(function(e){
           e.preventDefault();
           if($message.val() !== ''){
-            socket.emit('send message', {message: $message.val(), username: myUsername});
+            socket.emit('send message', {message: $message.val(), username: myUsername, room: $room.val()});
             $message.val('');
           }
         });
@@ -114,19 +116,23 @@
           myUsername = $user.val();
           myRoomname = $room.val();
           if($user.val !== ''){
-            socket.emit('send new user', myUsername);
+            //socket.emit('send new user', myUsername);
             socket.emit('enter room', {room: myRoomname, username: myUsername});
+            $roomDisplay.text(myRoomname); //!!! Change this into a separate event, for validating room isn't full
             $userForm.hide();
             document.getElementById('videoContainer').style.visibility = "visible";
           }
         });
-        
         
         socket.on('new message', function(data){
           const newChild = '<div class="well">' + data.username+ ": " + data.message + '</div>';
           $chatLog.prepend(newChild);
         });
         
+        socket.on('reconnect', function(attemptNumber) {
+          console.log("Reconnecting to server...");
+          socket.emit('enter room', {room: myRoomname, username: myUsername});
+        });
         
         socket.on('userList update', function(userList){
           users = [];
@@ -135,7 +141,10 @@
           $('#users-container').children().empty();
           //we then fill that <ul> with our updated user list <li> items
           for(var user in userList.users){
-            $userList.append("<li class='tempLi'>" + userList.users[user] + "</li>");
+            if(userList.users[user].room == myRoomname){   //!!!change this to filter if possible, prior to entering loop. Or change server-side before sending
+              console.log(userList.users[user].username);
+              $userList.append("<li class='tempLi'>" + userList.users[user].username + "</li>");
+            }
           }
           $userList.childNodes = users;
         });
