@@ -45,22 +45,21 @@ function findUsersByRoom( _arr, room ){
 //find user with a certain socket id. Expects string for id.
 function findUserById( _arr, id ){
   const result = _arr.filter(arrId => arrId.id == id);
-  console.log("Looked for user: " + id);
-  console.log("Found: ");
-  console.log(result);
   return result;
 }
 
 //find the room a user is in. Expects string for user
 function findRoomByUser( _arr, user ){
   const result = _arr.filter(arrUser => arrUser.username == user);
-  console.log(result);
+  console.log(result);//insert error checking
+  return result[0].room;
 }
 
 function findRoomById( _arr, id ){
   const result = _arr.filter(arrId => arrId.id == id);
   console.log("findRoomById: " + id + "\n returns: ");
-  console.log(result);
+  console.log(result); //insert error checking
+  return result;
 }
 
 module.exports = {
