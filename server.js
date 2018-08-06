@@ -37,9 +37,8 @@ function updateUserList(room){
   let usersInRoom = userArray.findUsersByRoom(users, room);
   console.log("users in room " + room + " are: ");
   console.log(usersInRoom);
-  io.to(room).emit('userList update', {users: usersInRoom}); //!!!consider NOT sending all id's, usernames, etc. to every user.
-  //eventually, change the value passed above to a simple object consisting of only usernames that have a specific room 
-  //also, change to io.to(room) instead of all sockets.minimize footprint of updating.
+  io.to(room).emit('userList update', {users: usersInRoom}); //!!!consider paring this down to just the users value for each entry.
+  //currently sends username, room, id for each user in the room.
 };
 
 //data is expected to consist of {room, username,id}
@@ -65,11 +64,11 @@ function removeUser(userid){
   let newUserList = userArray.removeUser(users, userid);
   if( newUserList == process.env.ERR_ID_NOT_FOUND ){
     //!!!Log user list at this time and the id we tried to remove, for debugging purposes.
-    console.log("Erroroccurred in removeUser");
+    console.log("Error Occurred in removeUser");
   } else {
     //okay to copy to main users array
     users = newUserList;
-    updateUserList(userArray.findRoomById(users, userid));
+    updateUserList(userArray.findUserById(users, userid));
   }
 }
 
@@ -99,6 +98,7 @@ io.sockets.on('connection', function(socket){
   socket.on('disconnect', function(data){
     connections = funcArray.removeFromArray(connections, socket);
     console.log("Disconnected: %s sockets connected", connections.length);
+    //!!!send message about disconnect to remaining users
     
     //find user's info in users array,
     //if it exists, remove their entry and send out update
@@ -109,18 +109,18 @@ io.sockets.on('connection', function(socket){
   
   
   //data expected to consist of {room, username}
-  socket.on('enter room', (data) => {
-    /*!!!check if room already exists. Lookup in array # of elements with room = room 
-        If it does, check size of users
-            If it is less than 2, add {room, user} to room, add socket to channel with id room
+  socket.on('request room', (data) => {
+    /*!!!check size of room
+            If it is less than 2, add {room, user, id} to user list, add socket to channel with id room
             If it is 2 or more, reject join request, try again.
         If it doesn't, add to array, add socket to channel with id room.
       */
     
     //users = userArray.addUser(users, {user: data.user, room: data.room, id: socket.id});
     //insert check here.
-    if(true){ 
+    if(userArray.findUsersByRoom(users, data.room).length < 2){ 
       enterRoom({...data, id: socket.id});
+      socket.emit('enter room', true);
       socket.join(data.room, () => {
         sendMessage({message: data.username + " has entered the room", username: "Server", room: data.room});
         console.log("User has joined room: " + data.room );
@@ -128,6 +128,8 @@ io.sockets.on('connection', function(socket){
         /*console.log("Rooms are: "); 
         console.log( io.sockets.adapter.rooms);*/
       });
+    } else{
+      socket.emit('enter room', false);
     }
   });
   

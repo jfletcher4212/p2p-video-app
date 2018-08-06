@@ -9,14 +9,14 @@
   <body>
     <link rel="stylesheet" href="/chatroom-style.css">
     <form id="userForm">
-      <div class="form-group">
+      <div class="form-group" id="formUser">
         <label>Enter Username:</label>
         <textarea class="form-control" id="username" required></textarea>
         <label>Enter Room Name:</label>
         <textarea class="form-control" id="roomName" required></textarea>
       </div>
       <br />
-      <input type="submit" class="btn btn-primary" value="Submit" />
+      <input type="submit" class="btn btn-primary" id="btnUserSubmit" value="Submit" />
     </form>
     
     <div class="videoContainer" id="videoContainer">
@@ -94,6 +94,10 @@
         let myUsername = '';
         let users = [];
         
+        function sanitizeInput(str){
+          console.log('sanitizing input!');
+          return str.replace(/\r?\n|\n/g,'');
+        };
         
         $messageForm.submit(function(e){
           e.preventDefault();
@@ -106,9 +110,18 @@
         //Send a message with enter.
         $message.keypress(function (event){
           if(event.which == 13){
+            $message.val(sanitizeInput($message.val()));
             $messageForm.click();
 //            $message.val('');
           };
+        });
+        
+        $room.keypress(function (event){
+          console.log(event);
+          if(event.which == 13){
+            $room.val(sanitizeInput($room.val()));
+            $('#btnUserSubmit').click();
+          }
         });
         
         $userForm.submit(function(e){
@@ -117,10 +130,20 @@
           myRoomname = $room.val();
           if($user.val !== ''){
             //socket.emit('send new user', myUsername);
-            socket.emit('enter room', {room: myRoomname, username: myUsername});
-            $roomDisplay.text(myRoomname); //!!! Change this into a separate event, for validating room isn't full
+            socket.emit('request room', {room: myRoomname, username: myUsername});
+            
+          }
+        });
+          
+        socket.on('enter room', function(allowed){
+          if(allowed){
+            $roomDisplay.text(myRoomname); 
             $userForm.hide();
             document.getElementById('videoContainer').style.visibility = "visible";
+          }
+          else{
+            console.log("Room full, try another room");
+            window.alert("Room full, try another room");
           }
         });
         
