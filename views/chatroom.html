@@ -38,7 +38,6 @@
         <div id="users-container">
           <ul class="list-group" id="users">
           </ul>
-          <input type="submit" class="btn btn-primary" value="Clear Users" id="btnUserClear" />
         </div>
       </div>
         <div class="videoBorder" id = "otherVideo">
@@ -56,7 +55,7 @@
                     <textarea class="form-control" id="message"></textarea>
                   </div>
                   <br />
-                  <input type="submit" class="btn btn-primary" value="Send Message" />
+                  <input type="submit" class="btn btn-primary" id="btnSendMessage" value="Send Message" />
                 </form>
                 <div id="chatLog">
                 </div>
@@ -72,13 +71,8 @@
         <video id="myStream" autoplay></video>
       </div>
     </div>
-     <!-- <script type="text/javascript" src="/getUserMedia.js"></script> -->
-    <script>
-      $('#btnUserClear').click(function(e){
-        e.preventDefault();
-        $('#users-container').children().empty();
-      });
-    </script>
+   <!--   <script type="text/javascript" src="/getUserMedia.js"></script> -->
+
     <script>
       $(function(){
         const socket = io.connect();
@@ -92,12 +86,53 @@
         const $chatLog= $('#chatLog');
         const $roomDisplay = $('#roomDisplay');
         let myUsername = '';
-        let users = [];
         
-        function sanitizeInput(str){
-          console.log('sanitizing input!');
+        function sendFailMessage(errCode){
+          const errCodes = {
+            USERNAME_INVALID: "-21",
+            ROOMNAME_INVALID: "-22",
+            ROOM_FULL: "-31"
+          };
+          
+          let errMessage="";
+          switch(errCode) {
+            case errCodes.USERNAME_INVALID:
+              errMessage="Invalid username. Try again.";
+              break;
+            case errCodes.ROOMNAME_INVALID:
+              errMessage="Invalid username. Try again.";
+              break;
+            case errCodes.ROOM_FULL:
+              errMessage="Room full. Try another room..";
+              break;
+            default:
+              errMessage="An unknown error ocurred. Try again.";
+              break;
+          }
+          window.alert(errMessage + "\n Error code: " + errCode);
+        }
+        
+        
+        function removeLineBreaks(str){
+          console.log('Removing line breaks!');
           return str.replace(/\r?\n|\n/g,'');
         };
+
+        //Send a message with enter.
+        $message.keypress(function (event){
+          if(event.which == 13){
+            $message.val(removeLineBreaks($message.val()));
+            $('#btnSendMessage').click();
+          };
+        });
+        
+        $room.keypress(function (event){
+          console.log(event);
+          if(event.which == 13){
+            $room.val(removeLineBreaks($room.val()));
+            $('#btnUserSubmit').click();
+          }
+        });
         
         $messageForm.submit(function(e){
           e.preventDefault();
@@ -107,43 +142,31 @@
           }
         });
         
-        //Send a message with enter.
-        $message.keypress(function (event){
-          if(event.which == 13){
-            $message.val(sanitizeInput($message.val()));
-            $messageForm.click();
-//            $message.val('');
-          };
-        });
-        
-        $room.keypress(function (event){
-          console.log(event);
-          if(event.which == 13){
-            $room.val(sanitizeInput($room.val()));
-            $('#btnUserSubmit').click();
-          }
-        });
-        
         $userForm.submit(function(e){
           e.preventDefault();
-          myUsername = $user.val();
-          myRoomname = $room.val();
-          if($user.val !== ''){
+          myUsername = removeLineBreaks($user.val());
+          myRoomname = removeLineBreaks($room.val()); 
+          if(myUsername !== ''){
             //socket.emit('send new user', myUsername);
             socket.emit('request room', {room: myRoomname, username: myUsername});
             
           }
         });
           
+        /*'enter room' expects an integer: {
+          *    1 if everything is okay, or 
+          *    a specific negative number as an error code if something went wrong
+          *    these numbers should match the error codes stored in the .env file.
+          *  }
+          */
         socket.on('enter room', function(allowed){
-          if(allowed){
+          if(allowed == 1){
             $roomDisplay.text(myRoomname); 
             $userForm.hide();
             document.getElementById('videoContainer').style.visibility = "visible";
           }
           else{
-            console.log("Room full, try another room");
-            window.alert("Room full, try another room");
+            sendFailMessage(allowed);
           }
         });
         
@@ -158,18 +181,18 @@
         });
         
         socket.on('userList update', function(userList){
-          users = [];
-          
           //empty our <ul> of previous list
           $('#users-container').children().empty();
           //we then fill that <ul> with our updated user list <li> items
+          console.log(userList);
           for(var user in userList.users){
+            
             if(userList.users[user].room == myRoomname){   //!!!change this to filter if possible, prior to entering loop. Or change server-side before sending
               console.log(userList.users[user].username);
               $userList.append("<li class='tempLi'>" + userList.users[user].username + "</li>");
             }
           }
-          $userList.childNodes = users;
+          $userList.childNodes = [];
         });
       });
     </script>

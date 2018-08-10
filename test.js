@@ -1,5 +1,6 @@
 const assert = require('assert');
 const userArray = require('./userArray.js');
+const sanitizer = require('./sanitizer.js');
 const mocha = require('mocha');
 const _ = require('underscore');
 /*
@@ -11,6 +12,9 @@ const _ = require('underscore');
  * findUserById,
  * findRoomByUser,
  * findRoomById
+ *
+ * SANITIZER UNIT TEST
+ * sanitizeData
  */
 
 const testLookupUsers = [
@@ -91,6 +95,16 @@ mocha.it('findUserById finds and returns the user with the given id', () => {
 mocha.it('findUserById reports an empty array if the id does not exist', () => {
   assert.equal(_.isEqual(userArray.findUserById(testFind, "nonexistant id"), []), true);
 });
+
+//SANITIZER
+//sanitizeData(data)
+mocha.it('sanitizeData returns the same string if the input is valid', () => {
+  assert.equal(sanitizer.sanitizeData("Hello user!"),"Hello user!");
+});
+mocha.it('sanitizeData a sanitized string if the input contains potential malicious data', () => {
+  assert.equal(sanitizer.sanitizeData("<script>window.alert('HELLO');</script>Hi"),"Hi");
+});
+
 
 //findRoomById( _arr, id )
 /*mocha.it('findRoomById finds and returns the rooms a given id is in', () => {

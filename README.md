@@ -7,10 +7,8 @@ When the user visits the site and grants permission to use their webcam and micr
 
 ## Known Issues/Planned Updates:
 
-* Data Sanitization needs to be implemented on all user input. 
 * Video Streaming needs to be implemented
 * UX needs to be improved.
-* Newlines in input should be removed before sending to server.
 
 ## To do next time:
-* Continue working on data sanitization and various user input problems.
+* Bug fixing/code revision. Look into implementing webRTC

@@ -36,19 +36,19 @@ function lookupId(_arr, id){
     return process.env.ERR_ID_NOT_FOUND;
 }
 
-//find users with a certain room. Expects a string for room.
+//find users with a certain room. Expects a string for room. Returns array consisting of all users in the given room.
 function findUsersByRoom( _arr, room ){
   const result = _arr.filter(arrRoom => arrRoom.room == room);
   return result;
 }
 
-//find user with a certain socket id. Expects string for id.
+//find user with a certain socket id. Expects string for id. Returns array consisting all users (presumably only 1) with given id
 function findUserById( _arr, id ){
   const result = _arr.filter(arrId => arrId.id == id);
   return result;
 }
 
-//find the room a user is in. Expects string for user
+//find the room a user is in. Expects string for user. Returns string with the room the user is in. Note: Functions similarly to findUserById, but returns a string instead of array.
 function findRoomByUser( _arr, user ){
   const result = _arr.filter(arrUser => arrUser.username == user);
   console.log(result);//insert error checking
@@ -57,8 +57,6 @@ function findRoomByUser( _arr, user ){
 
 function findRoomById( _arr, id ){
   const result = _arr.filter(arrId => arrId.id == id);
-  console.log("findRoomById: " + id + "\n returns: ");
-  console.log(result); //insert error checking
   return result;
 }
 
