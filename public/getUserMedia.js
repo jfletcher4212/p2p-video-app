@@ -4,7 +4,6 @@ function getMediaStream(constraints, mediaContainer){
   
 }
 
-  console.log("Ding dong");
   if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
    const constraints = {
      video: true,
