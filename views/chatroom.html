@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,6 +38,20 @@
           <ul class="list-group" id="users">
           </ul>
         </div>
+        
+        
+        
+        <div id="testBox">
+          <button id="btnTest">
+            Test me!
+          </button>
+          <p id = "pTest">
+            
+          </p>
+        </div>
+        
+        
+        
       </div>
         <div class="videoBorder" id = "otherVideo">
           <!-- <img id="otherUserStream" style="width:100%;" src="https://cdn.pixabay.com/photo/2017/08/04/05/37/coming-soon-2579123_960_720.jpg"> -->
@@ -74,6 +87,7 @@
    <!--   <script type="text/javascript" src="/getUserMedia.js"></script> -->
 
     <script>
+      
       $(function(){
         const socket = io.connect();
         const $messageForm = $('#messageForm');
@@ -86,6 +100,11 @@
         const $chatLog= $('#chatLog');
         const $roomDisplay = $('#roomDisplay');
         let myUsername = '';
+        
+        $('#btnTest').click(() => {
+          console.log("Button clicked!");
+          socket.emit('test', "Hello! I am a test!");
+        });
         
         function sendFailMessage(errCode){
           const errCodes = {
@@ -152,7 +171,10 @@
             
           }
         });
-          
+
+        socket.on('test response', function(data){
+          console.log(data);
+        });
         /*'enter room' expects an integer: {
           *    1 if everything is okay, or 
           *    a specific negative number as an error code if something went wrong
@@ -168,6 +190,9 @@
           else{
             sendFailMessage(allowed);
           }
+        });
+        socket.on('room full', function(data){
+          sendFailMessage(data);
         });
         
         socket.on('new message', function(data){
@@ -197,4 +222,4 @@
       });
     </script>
   </body>
-</html>
+</html>room full

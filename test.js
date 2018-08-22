@@ -95,7 +95,13 @@ mocha.it('findUserById finds and returns the user with the given id', () => {
 mocha.it('findUserById reports an empty array if the id does not exist', () => {
   assert.equal(_.isEqual(userArray.findUserById(testFind, "nonexistant id"), []), true);
 });
-
+//function findOtherUsersById( _arr, id )
+mocha.it('findOtherUsersById finds and returns the users without the given id', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersById(testFind, "555"), [testFind[0], testFind[2], testFind[3]]), true);
+});
+mocha.it('findOtherUsersById reports a copy of the original array if the id does not exist', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersById(testFind, "nonexistant id"), testFind), true);
+});
 //SANITIZER
 //sanitizeData(data)
 mocha.it('sanitizeData returns the same string if the input is valid', () => {
@@ -103,6 +109,20 @@ mocha.it('sanitizeData returns the same string if the input is valid', () => {
 });
 mocha.it('sanitizeData a sanitized string if the input contains potential malicious data', () => {
   assert.equal(sanitizer.sanitizeData("<script>window.alert('HELLO');</script>Hi"),"Hi");
+});
+
+//findOtherUserInRoom(users, id)
+mocha.it('findOtherUserInRoom returns an array of all users in a room other than one with a specific ID', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersInRoom(testFind, "1234") [{username: "bob",     id: "555",    room: "newRoom"}]), true);
+});
+mocha.it('findOtherUserInRoom returns an empty array if no users are in a given room', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersInRoom(testFind, "invalid"), []), true);
+});
+mocha.it('findOtherUserInRoom returns an empty array if an empty array is passed in', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersInRoom([], "1234"), []), true);
+});
+mocha.it('findOtherUserInRoom returns an empty array if no roomname is given', () => {
+  assert.equal(_.isEqual(userArray.findOtherUsersInRoom(testFind, ""), []), true);
 });
 
 
