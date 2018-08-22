@@ -2,12 +2,13 @@
 // where your node app starts
 
 // init project
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
-var error = require('./fail.js');
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
 const _ = require('underscore');
+
+const error = require('./fail.js');
 const funcArray = require('./funcArray.js');
 const userArray = require('./userArray.js');
 const socketActions = require('./socketActions.js');
@@ -32,14 +33,16 @@ function sendMessage(data){
   //sanitize message prior to sending.
   console.log("Sending message to room: " + data.room);
   data.message = sanitizer.sanitizeData(data.message);
-  console.log(data);
   io.to(data.room).emit('new message', data);
 };
 
+function sendToOtherUser(id){
+  let roomname = userArray.findRoomById(users, id); //string
+  let roomusers = userArray.findUsersByRoom(users, roomname); //array
+  let retVal = userArray.findOtherUsersById(roomusers, id); //array?
+};
 
 function updateUserList(room){
-  console.log('users is now: ');
-  console.log(users);
   //get a subarray of users, consisting of those in the appropriate room/channel
   let usersInRoom = userArray.findUsersByRoom(users, room);
   console.log("users in room " + room + " are: ");
@@ -53,7 +56,7 @@ function updateUserList(room){
 function enterRoom(data){
   let newUserList = userArray.addUser(users, data.username, data.room, data.id); //!!!check for error code before changing users
   if( newUserList == process.env.ERR_ID_TAKEN ){
-    console.log("Error happened in enterRoom")
+    console.error("Error happened in enterRoom")
     //!!!send alert to client to refresh and try again
     //Note: low priority. Odds of randomly generated socket id being a match is slim, if not nonexistent due to socket io's implementation.
   } else {
@@ -94,10 +97,34 @@ app.get("/", (req, res) => {
     send new user  -- redundant. A user is inherently paired with a room.
     send message
     receive video stream
+    receive ICE candidates?
+    
  */
 io.sockets.on('connection', function(socket){
   connections = funcArray.addToArray(connections, socket);
   console.log('Connected: %s sockets connected', connections.length);
+  
+  function getOtherUser(arr, id){
+    console.log(id);
+    let otherUser = userArray.findOtherUsersInRoom(arr, id); 
+    console.log(otherUser);
+    if(_.isEqual(otherUser, [])){
+      return null;
+    } else {
+      return otherUser[0];
+    }
+  };
+  
+  socket.on('test', (data) => {
+    console.log('button clicked!');
+    //test messages, functions, etc. here
+    let otherUser = getOtherUser(users, socket.id);
+    console.log(otherUser);
+    if( !(_.isEqual(otherUser, null)) ){
+      console.log("Sending message: " + data + " to socket: " + otherUser.id);
+      io.to(otherUser.id).emit('test response',data); 
+    }
+  });
   
   //Disconnect
   socket.on('disconnect', function(data){
@@ -117,31 +144,47 @@ io.sockets.on('connection', function(socket){
   
   //data expected to consist of {room, username}
   socket.on('request room', (data) => {
-    //!!!sanitize room and username here.
+    //Sanitize the data sent by the client, just in case a malformed request manages to be sent
     data.room = sanitizer.sanitizeData(data.room);
     data.username = sanitizer.sanitizeData(data.username);
+    let roomSize = userArray.findUsersByRoom(users, data.room);
     if(data.room == ''){
       socket.emit('enter room', process.env.ERR_ROOMNAME_INVALID);
     } else if(data.username == ''){
       socket.emit('enter room', process.env.ERR_USERNAME_INVALID);
-    } else if(userArray.findUsersByRoom(users, data.room).length < 2){ 
+    } else if (roomSize.length === 1){ //username and roomname are OK, and another user is in the room, ready to call.
+      console.log("Other user found. Info is: ");
+      console.log(userArray.findUsersByRoom(users, data.room));
       enterRoom({...data, id: socket.id});
-      socket.emit('enter room', 1);
       socket.join(data.room, () => {
         sendMessage({message: data.username + " has entered the room", username: "Server", room: data.room});
-        console.log("User has joined room: " + data.room );
         updateUserList(data.room);
-        /*console.log("Rooms are: "); 
-        console.log( io.sockets.adapter.rooms);*/
       });
+      socket.emit('enter room', 1);
+      //!!!initiate ICE candidates, stun stuff, and start sending feed
+      //Send signal to the user entering the room to begin creating an offer. 
+      // https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Signaling_and_video_calling for reference of below.
+      //!!!Create new socket.on('SDP message received') that transfers the offer to the other user. note: need type(offer or answer), callee and caller usernames, and SDP(string describing local end of the connection)
+      //!!!begin exchanging ICE candidates. need: type ("new-ice-candidate"), target (direct the message to this user only), and candidate (SDP candidate string, describing proposed connection method).
+      //NOTE: Once ICE candidates have been sent and an agreement reached, the two clients will send video directly to each other, without our needing to do anything but send messages as requested.
+    } else if(roomSize.length === 0){  //username and roomname are OK, and room is empty
+      enterRoom({...data, id: socket.id});
+      socket.join(data.room, () => {
+        sendMessage({message: data.username + " has entered the room", username: "Server", room: data.room});
+        updateUserList(data.room);
+      });
+      socket.emit('enter room', 1);
     } else{
-      socket.emit('enter room', process.env.ERR_ROOM_FULL);
+      socket.emit('room full', process.env.ERR_ROOM_FULL);
     }
   });
-  
   socket.on('send message', sendMessage);
-  
+  //message = {type: 'offer or 'answer', callee: string, caller: string (both usernames), SDP: string (describes local end of connection)}
+  socket.on('SDP message', (message) => {});
+  //message = {type: 'new-ice-candidate', target: string (username of user message is directed to), candidate: string (SDP string describing proposed connnection method)
+  socket.on('ICE message', (message) => {});
 });
+
 
 
 
