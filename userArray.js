@@ -67,16 +67,10 @@ function findRoomById( _arr, id ){
 }
 
 function findOtherUsersInRoom(users, id){
-  console.log(users);
-  let roomname = findRoomById(users, id)[0].room; //string
-  console.log('roomname:');
-  console.log(roomname);
-  let roomusers = findUsersByRoom(users, roomname); //array
-  console.log('roomusers:');
-  console.log(roomusers);
+  let roomname = findRoomById(users, id); //array
+  if(!(roomname[0])) return [];
+  let roomusers = findUsersByRoom(users, roomname[0].room); //array
   let retVal = findOtherUsersById(roomusers, id); //array
-  console.log('retval:');
-  console.log(retVal);
   return retVal;
 };
 
