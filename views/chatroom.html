@@ -41,13 +41,16 @@
         
         
         
-        <div id="testBox">
-          <button id="btnTest">
-            Test me!
+        <div id="callBox">
+          <button id="btnStartCall">
+            Start Call
           </button>
-          <p id = "pTest">
+          <p id = "pCallStatus">
             
           </p>
+          <button id="btnHangUp">
+            Hang Up
+          </button>
         </div>
         
         
@@ -101,16 +104,21 @@
         const $roomDisplay = $('#roomDisplay');
         let myUsername = '';
         
-        $('#btnTest').click(() => {
+        $('#btnStartCall').click(() => {
           console.log("Button clicked!");
-          socket.emit('test', "Hello! I am a test!");
+          sendToServer('start call', {message: "Hello! I am test!"});
+        });
+        $('#btnHangUp').click(() =>{
+          console.log("Hanging up!");
+          sendToServer('hang up', {message: "Hello! I am GoOdByE!"});
         });
         
         function sendFailMessage(errCode){
           const errCodes = {
             USERNAME_INVALID: "-21",
             ROOMNAME_INVALID: "-22",
-            ROOM_FULL: "-31"
+            ROOM_FULL: "-31",
+            CALL_FAILED: "-41",
           };
           
           let errMessage="";
@@ -131,7 +139,14 @@
           window.alert(errMessage + "\n Error code: " + errCode);
         }
         
-        
+        /*input: 
+             string msgType: represents how the server should handle the incoming message.
+             JSON Object msg: represents the message the server will receive.
+        */
+        function sendToServer(msgType, msg) {
+          var msgJSON = JSON.stringify(msg);
+          socket.emit(msgType, msgJSON);
+        };
         function removeLineBreaks(str){
           console.log('Removing line breaks!');
           return str.replace(/\r?\n|\n/g,'');
@@ -171,8 +186,11 @@
             
           }
         });
-
-        socket.on('test response', function(data){
+        
+        socket.on('call offer', function(data){
+          console.log(data);
+        });
+        socket.on('new ice candidate', function(data){
           console.log(data);
         });
         /*'enter room' expects an integer: {
@@ -222,4 +240,4 @@
       });
     </script>
   </body>
-</html>room full
+</html>

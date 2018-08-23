@@ -36,12 +36,6 @@ function sendMessage(data){
   io.to(data.room).emit('new message', data);
 };
 
-function sendToOtherUser(id){
-  let roomname = userArray.findRoomById(users, id); //string
-  let roomusers = userArray.findUsersByRoom(users, roomname); //array
-  let retVal = userArray.findOtherUsersById(roomusers, id); //array?
-};
-
 function updateUserList(room){
   //get a subarray of users, consisting of those in the appropriate room/channel
   let usersInRoom = userArray.findUsersByRoom(users, room);
@@ -115,14 +109,26 @@ io.sockets.on('connection', function(socket){
     }
   };
   
-  socket.on('test', (data) => {
-    console.log('button clicked!');
-    //test messages, functions, etc. here
+  /*the following two functions are expected to send JSON objects representing the offer to start a call, 
+   * as well as ICE candidates as part of negotiations for starting the call. The primary purpose for both
+   * is to simply pass messages between the two users, with the only variance being in the way the message
+   * is handled on the client end. It's possible to condense the two functions into one, by passing the emit
+   * message as a part of the data, but that would add additional overhead to save a small amount of LoC
+   *Note that the checks will negate a call being started if no other user is found in the room. We can
+   * send a message back to raise an error message here, if we so choose. (!!!)
+   */
+  socket.on('start call', (data) => {
     let otherUser = getOtherUser(users, socket.id);
-    console.log(otherUser);
-    if( !(_.isEqual(otherUser, null)) ){
-      console.log("Sending message: " + data + " to socket: " + otherUser.id);
-      io.to(otherUser.id).emit('test response',data); 
+    if( !(_.isNull(otherUser)) ){
+      console.log('Initiating call in room: ' + otherUser.room);
+      io.to(otherUser.id).emit('call offer',data); 
+    }
+  });
+  socket.on('ice candidate', (data) => {
+    let otherUser = getOtherUser(users, socket.id);
+    if( !(_.isNull(otherUser)) ){
+      console.log('Sending ice candidate in room: ' + otherUser.room);
+      io.to(otherUser.id).emit('new ice candidate', data); 
     }
   });
   
