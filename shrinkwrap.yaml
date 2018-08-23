@@ -1,15 +1,12 @@
 dependencies:
   dompurify: 1.0.7
   express: 4.16.3
-  jsdom: 11.12.0
+  jsdom: 12.0.0
   mocha: 5.2.0
   socket.io: 2.1.1
   underscore: 1.9.1
+  webrtc-adapter: 6.3.2
 packages:
-  /abab/1.0.4:
-    dev: false
-    resolution:
-      integrity: sha1-X6rZwsB/YN12dw9xzwJbYqY8/U4=
   /abab/2.0.0:
     dev: false
     resolution:
@@ -237,12 +234,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-+7prCSORpXNeR4/fUP3rL+TzqtiFfhMvTd7uEqMdgPvLPt4+uzFUeufx5RHjGTACCargg/DiEt/moMQmvnfkog==
-  /cssstyle/1.0.0:
+  /cssstyle/1.1.1:
     dependencies:
       cssom: 0.3.4
     dev: false
     resolution:
-      integrity: sha512-Bpuh47j2mRMY60X90mXaJAEtJwxvA2roZzbgwAXYhMbmwmakdRr4Cq9L5SkleKJNLOKqHIa2YWyOXDX3VgggSQ==
+      integrity: sha512-364AI1l/M5TYcFH83JnOH/pSqgaNnKmYgKrm0didZMGKWjQB60dymwWy1rKUgL3J1ffdq9xVi2yGLHdSjjSNog==
   /dashdash/1.14.1:
     dependencies:
       assert-plus: 1.0.0
@@ -251,14 +248,14 @@ packages:
       node: '>=0.10'
     resolution:
       integrity: sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=
-  /data-urls/1.0.0:
+  /data-urls/1.0.1:
     dependencies:
-      abab: 1.0.4
+      abab: 2.0.0
       whatwg-mimetype: 2.1.0
-      whatwg-url: 6.5.0
+      whatwg-url: 7.0.0
     dev: false
     resolution:
-      integrity: sha512-ai40PPQR0Fn1lD2PPie79CibnlMN2AYiDhwFX/rZHVsxbs5kNJSjegqXIprhouGXlRdEnfybva7kqRGnB6mypA==
+      integrity: sha512-0HdcMZzK6ubMUnsMmQmG0AcLQPvbvb47R0+7CCZQCYgcd8OUWG91CG7sM6GoXgjz+WLl4ArFzHtBMy/QqSF4eg==
   /debug/2.6.9:
     dependencies:
       ms: 2.0.0
@@ -555,7 +552,7 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha1-qUwiJOvKwEeCoNkDVSHyRzW37JI=
-  /har-validator/5.0.3:
+  /har-validator/5.1.0:
     dependencies:
       ajv: 5.5.2
       har-schema: 2.0.0
@@ -563,7 +560,7 @@ packages:
     engines:
       node: '>=4'
     resolution:
-      integrity: sha1-ukAsJmGU8VlW7xXg/PJCmT9qff0=
+      integrity: sha512-+qnmNjI4OfH2ipQ9VQOw23bBd/ibtfbVdK2fYbY4acTDqKTW/YDp9McimZdDbG8iV9fZizUqQMD5xvriB146TA==
   /has-binary2/1.0.3:
     dependencies:
       isarray: 2.0.1
@@ -587,7 +584,7 @@ packages:
       integrity: sha1-k0EP0hsAlzUVH4howvJx80J+I/0=
   /html-encoding-sniffer/1.0.2:
     dependencies:
-      whatwg-encoding: 1.0.3
+      whatwg-encoding: 1.0.4
     dev: false
     resolution:
       integrity: sha512-71lZziiDnsuabfdYiUeWdCVyKuqwWi23L8YeIgV9jSSZHCtb6wB1BKWooH7L3tn4/FuZJMVWyNaIDr4RGmaSYw==
@@ -619,6 +616,14 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-oTZqweIP51xaGPI4uPa56/Pri/480R+mo7SeU+YETByQNhDG55ycFyNLIgta9vXhILrxXDmF7ZGhqZIcuN0gJQ==
+  /iconv-lite/0.4.23:
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-neyTUVFtahjf0mB3dZT77u+8O0QB89jFdnBkd5P1JgYPbPaia3gXXOVL2fq8VyU2gMMD7SaN7QukTB/pmXYvDA==
   /indexof/0.0.1:
     dev: false
     resolution:
@@ -657,37 +662,36 @@ packages:
     optional: true
     resolution:
       integrity: sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
-  /jsdom/11.12.0:
+  /jsdom/12.0.0:
     dependencies:
       abab: 2.0.0
       acorn: 5.7.1
       acorn-globals: 4.1.0
       array-equal: 1.0.0
       cssom: 0.3.4
-      cssstyle: 1.0.0
-      data-urls: 1.0.0
+      cssstyle: 1.1.1
+      data-urls: 1.0.1
       domexception: 1.0.1
       escodegen: 1.11.0
       html-encoding-sniffer: 1.0.2
-      left-pad: 1.3.0
       nwsapi: 2.0.8
-      parse5: 4.0.0
+      parse5: 5.1.0
       pn: 1.1.0
-      request: 2.87.0
-      request-promise-native: /request-promise-native/1.0.5/request@2.87.0
+      request: 2.88.0
+      request-promise-native: /request-promise-native/1.0.5/request@2.88.0
       sax: 1.2.4
       symbol-tree: 3.2.2
       tough-cookie: 2.4.3
       w3c-hr-time: 1.0.1
       webidl-conversions: 4.0.2
-      whatwg-encoding: 1.0.3
+      whatwg-encoding: 1.0.4
       whatwg-mimetype: 2.1.0
-      whatwg-url: 6.5.0
-      ws: 5.2.2
+      whatwg-url: 7.0.0
+      ws: 6.0.0
       xml-name-validator: 3.0.0
     dev: false
     resolution:
-      integrity: sha512-y8Px43oyiBM13Zc1z780FrfNLJCXTL40EWlty/LXUtcjykRBNgLlCjWXpfSPBl2iv+N7koQN+dvqszHZgT/Fjw==
+      integrity: sha512-42RgZYXWwyClG0pN6Au7TExAQqRvzbtJhlcIvu58cJj4yr1bIbqZkgxHqn1btxKu80axZXPZLvldeTzg2auKow==
   /json-schema-traverse/0.3.1:
     dev: false
     resolution:
@@ -711,10 +715,6 @@ packages:
       '0': node >=0.6.0
     resolution:
       integrity: sha1-MT5mvB5cwG5Di8G3SZwuXFastqI=
-  /left-pad/1.3.0:
-    dev: false
-    resolution:
-      integrity: sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA==
   /levn/0.3.0:
     dependencies:
       prelude-ls: 1.1.2
@@ -831,10 +831,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-7RZ+qbFGiVc6v14Y8DSZjPN1wZPOaMbiiP4tzf5eNuyOITAeOIA3cMhjuKUypVIqBgCSg1KaSyAv8Ocq/0ZJ1A==
-  /oauth-sign/0.8.2:
+  /oauth-sign/0.9.0:
     dev: false
     resolution:
-      integrity: sha1-Rqarfwrq2N6unsBWV4C31O/rnUM=
+      integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
   /object-component/0.0.3:
     dev: false
     resolution:
@@ -866,10 +866,10 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha1-NkxeQJ0/TWMB1sC0wFu6UBgK62Q=
-  /parse5/4.0.0:
+  /parse5/5.1.0:
     dev: false
     resolution:
-      integrity: sha512-VrZ7eOd3T1Fk4XWNXMgiGBK/z0MG48BWG2uQNU4I72fkQuKUTZpl+u9k+CxEG0twMVzSmXEEz12z5Fnw1jIQFA==
+      integrity: sha512-fxNG2sQjHvlVAYmzBZS9YlDp6PTSSDwa98vkD4QgVDDCAo84z5X1t5XyJQ62ImdLXx5NdIIfihey6xpum9/gRQ==
   /parseqs/0.0.5:
     dependencies:
       better-assert: 1.0.2
@@ -964,10 +964,10 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha1-vNYMd9Prk83gBQKVw/N5OJvIj4k=
-  /request-promise-core/1.1.1/request@2.87.0:
+  /request-promise-core/1.1.1/request@2.88.0:
     dependencies:
       lodash: 4.17.10
-      request: 2.87.0
+      request: 2.88.0
     dev: false
     engines:
       node: '>=0.10.0'
@@ -976,10 +976,10 @@ packages:
       request: ^2.34
     resolution:
       integrity: sha1-Pu4AssWqgyOc+wTFcA2jb4HNCLY=
-  /request-promise-native/1.0.5/request@2.87.0:
+  /request-promise-native/1.0.5/request@2.88.0:
     dependencies:
-      request: 2.87.0
-      request-promise-core: /request-promise-core/1.1.1/request@2.87.0
+      request: 2.88.0
+      request-promise-core: /request-promise-core/1.1.1/request@2.88.0
       stealthy-require: 1.1.1
       tough-cookie: 2.4.3
     dev: false
@@ -990,7 +990,7 @@ packages:
       request: ^2.34
     resolution:
       integrity: sha1-UoF3D2jgyXGeUWP9P6tIIhX0/aU=
-  /request/2.87.0:
+  /request/2.88.0:
     dependencies:
       aws-sign2: 0.7.0
       aws4: 1.8.0
@@ -999,24 +999,33 @@ packages:
       extend: 3.0.2
       forever-agent: 0.6.1
       form-data: 2.3.2
-      har-validator: 5.0.3
+      har-validator: 5.1.0
       http-signature: 1.2.0
       is-typedarray: 1.0.0
       isstream: 0.1.2
       json-stringify-safe: 5.0.1
       mime-types: 2.1.19
-      oauth-sign: 0.8.2
+      oauth-sign: 0.9.0
       performance-now: 2.1.0
       qs: 6.5.2
       safe-buffer: 5.1.2
-      tough-cookie: 2.3.4
+      tough-cookie: 2.4.3
       tunnel-agent: 0.6.0
       uuid: 3.3.2
     dev: false
     engines:
       node: '>= 4'
     resolution:
-      integrity: sha512-fcogkm7Az5bsS6Sl0sibkbhcKsnyon/jV1kF3ajGmF0c8HrttdKTPRT9hieOaQHA5HEq6r8OyWOo/o781C1tNw==
+      integrity: sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
+  /rtcpeerconnection-shim/1.2.13:
+    dependencies:
+      sdp: 2.8.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+      npm: '>=3.10.0'
+    resolution:
+      integrity: sha512-Xz4zQLZNs9lFBvqbaHGIjLWtyZ1V82ec5r+WNEo7NlIx3zF5M3ytn9mkkfYeZmpE032cNg3Vvf0rP8kNXUNd9w==
   /safe-buffer/5.1.1:
     dev: false
     resolution:
@@ -1033,6 +1042,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
+  /sdp/2.8.0:
+    dev: false
+    resolution:
+      integrity: sha512-wRSES07rAwKWAR7aev9UuClT7kdf9ZTdeUK5gTgHue9vlhs19Fbm3ccNEGJO4y2IitH4/JzS4sdzyPl6H2KQLw==
   /send/0.16.2:
     dependencies:
       debug: 2.6.9
@@ -1167,14 +1180,6 @@ packages:
     dev: false
     resolution:
       integrity: sha1-F+bBH3PdTz10zaek/zI46a2b+JA=
-  /tough-cookie/2.3.4:
-    dependencies:
-      punycode: 1.4.1
-    dev: false
-    engines:
-      node: '>=0.8'
-    resolution:
-      integrity: sha512-TZ6TTfI5NtZnuyy/Kecv+CnoROnyXn2DN97LontgQpCwsX2XyLYCC0ENhYkehSOwAp8rTQKc/NUIF7BkQ5rKLA==
   /tough-cookie/2.4.3:
     dependencies:
       psl: 1.1.29
@@ -1269,24 +1274,34 @@ packages:
     dev: false
     resolution:
       integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-  /whatwg-encoding/1.0.3:
+  /webrtc-adapter/6.3.2:
     dependencies:
-      iconv-lite: 0.4.19
+      rtcpeerconnection-shim: 1.2.13
+      sdp: 2.8.0
+    dev: false
+    engines:
+      node: '>=6.0.0'
+      npm: '>=3.10.0'
+    resolution:
+      integrity: sha512-7pFMXpZCka7ScIQyk8Wo+fOr3OlKLtGd6YHqkHVT74zerpY2Siyds8sxsmkE0bNqsi/J1b0vDzN7WpB34dQzAA==
+  /whatwg-encoding/1.0.4:
+    dependencies:
+      iconv-lite: 0.4.23
     dev: false
     resolution:
-      integrity: sha512-jLBwwKUhi8WtBfsMQlL4bUUcT8sMkAtQinscJAe/M4KHCkHuUJAF6vuB0tueNIw4c8ziO6AkRmgY+jL3a0iiPw==
+      integrity: sha512-vM9KWN6MP2mIHZ86ytcyIv7e8Cj3KTfO2nd2c8PFDqcI4bxFmQp83ibq4wadq7rL9l9sZV6o9B0LTt8ygGAAXg==
   /whatwg-mimetype/2.1.0:
     dev: false
     resolution:
       integrity: sha512-FKxhYLytBQiUKjkYteN71fAUA3g6KpNXoho1isLiLSB3N1G4F35Q5vUxWfKFhBwi5IWF27VE6WxhrnnC+m0Mew==
-  /whatwg-url/6.5.0:
+  /whatwg-url/7.0.0:
     dependencies:
       lodash.sortby: 4.7.0
       tr46: 1.0.1
       webidl-conversions: 4.0.2
     dev: false
     resolution:
-      integrity: sha512-rhRZRqx/TLJQWUpQ6bmrt2UV4f0HCQ463yQuONJqC6fO2VoEb1pTYddbe59SkYq87aoM5A3bdhMZiUiVws+fzQ==
+      integrity: sha512-37GeVSIJ3kn1JgKyjiYNmSLP1yzbpb29jdmwBSgkD9h40/hyrR/OifpVUndji3tmwGgD8qpw7iQu3RSbCrBpsQ==
   /wordwrap/1.0.0:
     dev: false
     resolution:
@@ -1303,12 +1318,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-nnWLa/NwZSt4KQJu51MYlCcSQ5g7INpOrOMt4XV8j4dqTXdmlUmSHQ8/oLC069ckre0fRsgfvsKwbTdtKLCDkA==
-  /ws/5.2.2:
+  /ws/6.0.0:
     dependencies:
       async-limiter: 1.0.0
     dev: false
     resolution:
-      integrity: sha512-jaHFD6PFv6UgoIVda6qZllptQsMlDEJkTQcybzzXDYM1XO9Y8em691FGMPmM46WGyLU4z9KMgQN+qrux/nhlHA==
+      integrity: sha512-c2UlYcAZp1VS8AORtpq6y4RJIkJ9dQz18W32SpR/qXGfLDZ2jU4y4wKvvZwqbi7U6gxFQTeE+urMbXU/tsDy4w==
   /xml-name-validator/3.0.0:
     dev: false
     resolution:
@@ -1329,7 +1344,8 @@ shrinkwrapVersion: 3
 specifiers:
   dompurify: ^1.0.7
   express: ^4.16.3
-  jsdom: ^11.12.0
+  jsdom: ^12.0.0
   mocha: ^5.2.0
   socket.io: ^2.1.1
   underscore: ^1.9.1
+  webrtc-adapter: ^6.3.2

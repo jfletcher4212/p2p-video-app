@@ -12,7 +12,8 @@ const _ = require('underscore');
  * findUserById,
  * findRoomByUser,
  * findRoomById
- *
+ * findOtherUsersById,
+ * 
  * SANITIZER UNIT TEST
  * sanitizeData
  */
